@@ -2,6 +2,8 @@
 
 A beautiful Google Fonts picker component for Filament forms with real-time font previews, search functionality, and category filtering.
 
+<img width="450" alt="image" src="https://github.com/user-attachments/assets/e2de5634-f7af-4e0d-bf38-d6044da191e0" />
+
 ## Features
 
 - 🔍 **Search Google Fonts**: Find fonts quickly with intelligent search
