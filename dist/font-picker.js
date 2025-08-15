@@ -1,4 +1,4 @@
-function fontPicker(wire, statePath) {
+function fontPicker(wire, statePath, availableCategories = [], selectedCategories = []) {
     return {
         state: wire.$entangle(statePath),
         isOpen: false,
@@ -8,7 +8,7 @@ function fontPicker(wire, statePath) {
         filteredFonts: [],
         fontPreviews: {},
         loadedFonts: new Set(),
-        selectedCategories: [],
+        selectedCategories: [...selectedCategories],
         highlightedIndex: -1,
         focusedElement: null,
 

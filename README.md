@@ -42,6 +42,37 @@ FontPicker::make('font')
     ->label('Choose Font')
 ```
 
+### Options
+
+You can control which font categories are available and which are preselected:
+
+#### Available Categories
+
+Limit which categories are shown (restricts the available options):
+
+```php
+FontPicker::make('font')
+    ->availableCategories([
+        'serif', 
+        'sans-serif', 
+        'monospace', 
+        'display', 
+        'handwriting',
+    ])
+```
+
+#### Selected Categories
+
+Preselect certain categories when the component loads (users can still change them):
+
+```php
+FontPicker::make('font')
+    ->selectedCategories([
+        'monospace', 
+        'handwriting',
+    ])
+```
+
 ## Requirements
 
 - PHP 8.2+

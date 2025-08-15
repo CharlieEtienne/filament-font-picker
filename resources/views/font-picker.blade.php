@@ -3,7 +3,7 @@
     :field="$field"
 >
     <div
-        x-data="fontPicker($wire, @js($getStatePath()))"
+        x-data="fontPicker($wire, @js($getStatePath()), @js($getAvailableCategories()), @js($getSelectedCategories()))"
         x-init="init()"
         {{ $getExtraAttributeBag() }}
     >
@@ -71,13 +71,16 @@
                         <div class="flex gap-1 px-3 py-2 flex-wrap">
 
                             @php
-                                $categories = [
+                                $allCategories = [
                                     'serif' => 'Serif',
                                     'sans-serif' => 'Sans',
                                     'monospace' => 'Mono',
                                     'display' => 'Display',
                                     'handwriting' => 'Hand',
                                 ];
+
+                                $availableCategories = $getAvailableCategories();
+                                $categories = empty($availableCategories) ? $allCategories : array_intersect_key($allCategories, array_flip($availableCategories));
                             @endphp
 
                             @foreach($categories as $key => $category)
