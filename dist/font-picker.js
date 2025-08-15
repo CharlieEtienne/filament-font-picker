@@ -9,6 +9,8 @@ function fontPicker(wire, statePath) {
         fontPreviews: {},
         loadedFonts: new Set(),
         selectedCategories: [],
+        highlightedIndex: -1,
+        focusedElement: null,
 
         async init() {
             await this.loadGoogleFonts();
@@ -70,6 +72,7 @@ function fontPicker(wire, statePath) {
             }
 
             this.filteredFonts = fonts;
+            this.resetHighlight();
         },
 
         toggleCategoryFilter(category) {
@@ -114,6 +117,113 @@ function fontPicker(wire, statePath) {
             this.state = fontFamily;
             this.isOpen = false;
             this.loadFontPreview(fontFamily);
+            this.highlightedIndex = -1;
+        },
+
+        // Keyboard navigation methods
+        handleKeyDown(event) {
+            if (!this.isOpen) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    this.open();
+                }
+                return;
+            }
+
+            // Prevent handling the same event multiple times
+            if (event.defaultPrevented) {
+                return;
+            }
+
+            switch (event.key) {
+                case 'ArrowDown':
+                    event.preventDefault();
+                    this.highlightNext();
+                    break;
+                case 'ArrowUp':
+                    event.preventDefault();
+                    this.highlightPrevious();
+                    break;
+                case 'Enter':
+                    event.preventDefault();
+                    this.selectHighlightedFont();
+                    break;
+                case ' ':
+                    if (event.target !== this.$refs.searchInput) {
+                        event.preventDefault();
+                        this.selectHighlightedFont();
+                    }
+                    break;
+                case 'Escape':
+                    event.preventDefault();
+                    this.close();
+                    break;
+                case 'Home':
+                    event.preventDefault();
+                    this.highlightedIndex = 0;
+                    this.scrollToHighlighted();
+                    break;
+                case 'End':
+                    event.preventDefault();
+                    this.highlightedIndex = Math.min(this.filteredFonts.length - 1, 49);
+                    this.scrollToHighlighted();
+                    break;
+                case 'Tab':
+                    this.close();
+                    break;
+            }
+        },
+
+        highlightNext() {
+            const maxIndex = Math.min(this.filteredFonts.length - 1, 49);
+            if (this.highlightedIndex < maxIndex) {
+                this.highlightedIndex++;
+                this.scrollToHighlighted();
+            }
+        },
+
+        highlightPrevious() {
+            if (this.highlightedIndex > 0) {
+                this.highlightedIndex--;
+                this.scrollToHighlighted();
+            }
+        },
+
+        selectHighlightedFont() {
+            if (this.highlightedIndex >= 0 && this.highlightedIndex < this.filteredFonts.length) {
+                const font = this.filteredFonts[this.highlightedIndex];
+                this.selectFont(font.family);
+            }
+        },
+
+        scrollToHighlighted() {
+            this.$nextTick(() => {
+                const fontList = this.$refs.fontList;
+                const options = fontList?.querySelectorAll('.font-option-container');
+                const highlightedOption = options?.[this.highlightedIndex];
+
+                if (highlightedOption && fontList) {
+                    const optionTop = highlightedOption.offsetTop;
+                    const optionBottom = optionTop + highlightedOption.offsetHeight;
+                    const listTop = fontList.scrollTop;
+                    const listBottom = listTop + fontList.clientHeight;
+
+                    if (optionTop < listTop) {
+                        fontList.scrollTop = optionTop;
+                    } else if (optionBottom > listBottom) {
+                        fontList.scrollTop = optionBottom - fontList.clientHeight;
+                    }
+                }
+            });
+        },
+
+        close() {
+            this.isOpen = false;
+            this.highlightedIndex = -1;
+        },
+
+        resetHighlight() {
+            this.highlightedIndex = -1;
         },
     }
 }

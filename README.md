@@ -12,6 +12,7 @@ A beautiful Google Fonts picker component for Filament forms with real-time font
 - ⚡ **Performance Optimized**: Fonts load only when needed with intersection observer
 - 🌙 **Dark Mode Support**: Seamless integration with Filament's dark mode
 - 📱 **Mobile Friendly**: Responsive design that works on all devices
+- ♿ **Accessibility First**: Full keyboard navigation and screen reader support
 
 ## Installation
 

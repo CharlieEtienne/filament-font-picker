@@ -24,9 +24,14 @@
                 <button
                     x-show="!isLoading"
                     @click="open()"
+                    @keydown="handleKeyDown($event)"
                     type="button"
                     class="fi-select-input-btn"
                     :style="state ? `font-family: '${state}', system-ui, -apple-system, sans-serif` : ''"
+                    :aria-expanded="isOpen"
+                    aria-haspopup="listbox"
+                    role="combobox"
+                    :aria-label="state ? `Selected font: ${state}` : 'Select a font'"
                 >
                     <span x-text="state || 'Select font'" class="truncate"></span>
                 </button>
@@ -34,14 +39,16 @@
                 <!-- Dropdown Panel -->
                 <div
                     x-show="isOpen && !isLoading"
-                    @click.away="isOpen = false"
+                    @click.away="close()"
                     x-transition:enter="transition ease-out duration-100"
                     x-transition:enter-start="transform opacity-0 scale-95"
                     x-transition:enter-end="transform opacity-100 scale-100"
                     x-transition:leave="transition ease-in duration-75"
                     x-transition:leave-start="transform opacity-100 scale-100"
                     x-transition:leave-end="transform opacity-0 scale-95"
-                    class="fi-dropdown-panel overflow-hidden max-h-100 mt-1" role="listbox" tabindex="-1"
+                    class="fi-dropdown-panel overflow-hidden max-h-100 mt-1"
+                    role="listbox"
+                    aria-label="Font selection"
                 >
                     <!-- Search Input -->
                     <div class="border-b border-gray-200 dark:border-gray-700">
@@ -51,9 +58,12 @@
                                 x-ref="searchInput"
                                 placeholder="Search Google Fonts..."
                                 class="fi-input"
-                                @keydown.escape="isOpen = false"
-                                @keydown.enter.prevent=""
+                                @keydown="handleKeyDown($event)"
                                 @input="searchFonts"
+                                role="searchbox"
+                                aria-label="Search fonts"
+                                aria-autocomplete="list"
+                                :aria-activedescendant="highlightedIndex >= 0 ? `font-option-${highlightedIndex}` : null"
                             >
                         </div>
 
@@ -89,7 +99,7 @@
 
                     <!-- Font Options -->
                     <div class="max-h-60 overflow-y-auto overflow-x-clip" x-ref="fontList">
-                        <template x-for="font in filteredFonts.slice(0, 50)" :key="font.family">
+                        <template x-for="(font, index) in filteredFonts.slice(0, 50)" :key="font.family">
                             <div
                                 x-data="{ fontLoaded: false }"
                                 x-intersect.once="loadFontWhenVisible(font.family, $el)"
@@ -97,10 +107,17 @@
                             >
                                 <button
                                     @click="selectFont(font.family)"
+                                    @mouseenter="highlightedIndex = index"
                                     type="button"
                                     class="w-full px-4 py-4 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border-b border-gray-200 dark:border-gray-700/50 last:border-b-0 flex items-center justify-between"
-                                    :class="{ 'bg-primary-50 dark:bg-primary-700/20': state === font.family }"
+                                    :class="{
+                                        'bg-primary-50 dark:bg-primary-700/20': state === font.family,
+                                        'bg-primary-100 dark:bg-primary-600/30': highlightedIndex === index && state !== font.family
+                                    }"
                                     :style="fontPreviews[font.family] ? `font-family: '${font.family}', system-ui, -apple-system, sans-serif` : ''"
+                                    role="option"
+                                    :aria-selected="state === font.family"
+                                    :id="`font-option-${index}`"
                                 >
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center justify-between">
