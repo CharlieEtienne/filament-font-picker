@@ -41,32 +41,11 @@ FontPicker::make('font')
     ->label('Choose Font')
 ```
 
-### Available options
-
-Here are all the available options you can pass to the component:
-
-```php
-FontPicker::make('font')
-    ->label('Heading Font')
-    ->placeholder('Select a font family...')
-```
-
 ## Requirements
 
 - PHP 8.2+
 - Filament 4.0+
 - Laravel 11.0+
-
-## Font Data
-
-The component uses a curated list of Google Fonts stored in `google-fonts.json`. 
-The fonts are categorized and include metadata for optimal filtering and searching.
-
-## Browser Support
-
-- Modern browsers with ES6+ support
-- Intersection Observer API support
-- CSS Grid and Flexbox support
 
 ## Contributing
 
