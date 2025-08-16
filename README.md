@@ -73,6 +73,21 @@ FontPicker::make('font')
     ])
 ```
 
+#### Other options
+
+You can customize all these options:
+
+```php
+FontPicker::make('font')
+    ->placeholder('Select a font')
+    ->searchPrompt('Search fonts')
+    ->previewText('The quick brown fox jumps over the lazy dog')
+    ->noResultsTitle('No fonts found matching')
+    ->noResultsSubtitle('Try searching for serif, sans-serif, monospace, or display fonts')
+    ->loadingMessage('Loading Google Fonts...')
+    ->loadingPreviewMessage('Loading preview...')
+```
+
 ## Requirements
 
 - PHP 8.2+

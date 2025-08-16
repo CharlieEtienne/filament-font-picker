@@ -17,6 +17,7 @@ class FontPickerServiceProvider extends PackageServiceProvider
     public function configurePackage(Package $package): void
     {
         $package->name(static::$name)
+            ->hasTranslations()
             ->hasViews(static::$viewNamespace);
     }
 

@@ -16,7 +16,7 @@
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        Loading Google Fonts...
+                        {{ $getLoadingMessage() }}
                     </div>
                 </div>
 
@@ -31,9 +31,9 @@
                     :aria-expanded="isOpen"
                     aria-haspopup="listbox"
                     role="combobox"
-                    :aria-label="state ? `Selected font: ${state}` : 'Select a font'"
+                    :aria-label="state ? `Selected font: ${state}` : '{{ $getPlaceholder() }}'"
                 >
-                    <span x-text="state || 'Select font'" class="truncate"></span>
+                    <span x-text="state || '{{ $getPlaceholder() }}'" class="truncate"></span>
                 </button>
 
                 <!-- Dropdown Panel -->
@@ -56,12 +56,12 @@
                             <input
                                 x-model="search"
                                 x-ref="searchInput"
-                                placeholder="Search Google Fonts..."
+                                placeholder="{{ $getSearchPrompt() }}"
                                 class="fi-input"
                                 @keydown="handleKeyDown($event)"
                                 @input="searchFonts"
                                 role="searchbox"
-                                aria-label="Search fonts"
+                                aria-label="{{ $getSearchPrompt() }}"
                                 aria-autocomplete="list"
                                 :aria-activedescendant="highlightedIndex >= 0 ? `font-option-${highlightedIndex}` : null"
                             >
@@ -135,7 +135,7 @@
                                             <!-- Loading indicator for font preview -->
                                             <div x-show="!fontPreviews[font.family]" class="flex items-center">
                                                 <div class="w-3 h-3 mr-2 border border-gray-400 border-t-transparent rounded-full animate-spin opacity-50"></div>
-                                                <span>Loading preview...</span>
+                                                <span>{{ $getLoadingPreviewMessage() }}</span>
                                             </div>
 
                                             <!-- Actual font preview -->
@@ -144,7 +144,7 @@
                                                 class="truncate"
                                                 :style="fontPreviews[font.family] ? `font-family: '${font.family}';` : ''"
                                             >
-                                                The quick brown fox jumps over the lazy dog
+                                                {{ $getPreviewText() }}
                                             </div>
                                         </div>
                                     </div>
@@ -159,8 +159,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
                             </div>
-                            No fonts found matching "<span x-text="search" class="font-medium"></span>"
-                            <div class="text-xs mt-1">Try searching for serif, sans-serif, monospace, or display fonts</div>
+                            {{ $getNoResultsTitle() }} "<span x-text="search" class="font-medium"></span>"
+                                <div class="text-xs mt-1">{{ $getNoResultsSubtitle() }}</div>
                         </div>
 
                         <!-- Show limited results notice -->
