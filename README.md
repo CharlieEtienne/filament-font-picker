@@ -88,6 +88,23 @@ FontPicker::make('font')
     ->loadingPreviewMessage('Loading preview...')
 ```
 
+### Updating the Google Fonts list
+
+The package includes a built-in Google Fonts dataset that works out of the box. 
+
+However, if you want to update the fonts data or need the latest fonts from Google, you'll need to configure a Google Fonts API key.
+
+1. **Get a Google Fonts API key** from the [Google Cloud Console](https://developers.google.com/fonts/docs/developer_api#APIKey)
+2. **Add your API key** to your `.env` file:
+   ```env
+   GOOGLE_FONTS_API_KEY=your_api_key_here
+   ```
+3. **Update the Google Fonts data** with the latest fonts from Google's API:
+   ```bash
+   php artisan filament-font-picker:update-fonts
+   ```
+    This command will fetch the latest fonts from Google and update the list of available fonts.
+
 ## Requirements
 
 - PHP 8.2+

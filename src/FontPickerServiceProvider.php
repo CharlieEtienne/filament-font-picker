@@ -17,8 +17,10 @@ class FontPickerServiceProvider extends PackageServiceProvider
     public function configurePackage(Package $package): void
     {
         $package->name(static::$name)
+            ->hasConfigFile()
             ->hasTranslations()
-            ->hasViews(static::$viewNamespace);
+            ->hasViews(static::$viewNamespace)
+            ->hasCommand(Commands\UpdateGoogleFontsCommand::class);
     }
 
     public function packageBooted(): void
