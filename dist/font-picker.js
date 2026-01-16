@@ -1,8 +1,9 @@
-function fontPicker(wire, statePath, availableCategories = [], selectedCategories = []) {
+function fontPicker(wire, statePath, availableCategories = [], selectedCategories = [], isDisabled = false) {
     return {
         state: wire.$entangle(statePath),
         isOpen: false,
         isLoading: true,
+        isDisabled: isDisabled,
         search: '',
         googleFonts: [],
         filteredFonts: [],
@@ -27,6 +28,9 @@ function fontPicker(wire, statePath, availableCategories = [], selectedCategorie
         },
 
         open() {
+            if (this.isDisabled) {
+                return;
+            }
             this.isOpen = !this.isOpen;
             if (this.isOpen) {
                 this.$nextTick(() => {
@@ -122,6 +126,10 @@ function fontPicker(wire, statePath, availableCategories = [], selectedCategorie
 
         // Keyboard navigation methods
         handleKeyDown(event) {
+            if (this.isDisabled) {
+                return;
+            }
+
             if (!this.isOpen) {
                 if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();

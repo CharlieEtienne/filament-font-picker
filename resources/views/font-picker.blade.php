@@ -2,12 +2,19 @@
     :component="$getFieldWrapperView()"
     :field="$field"
 >
+    @php
+        $isDisabled = $isDisabled();
+    @endphp
     <div
-        x-data="fontPicker($wire, @js($getStatePath()), @js($getAvailableCategories()), @js($getSelectedCategories()))"
+        x-data="fontPicker($wire, @js($getStatePath()), @js($getAvailableCategories()), @js($getSelectedCategories()), @js($isDisabled))"
         x-init="init()"
         {{ $getExtraAttributeBag() }}
     >
-        <div class="fi-input-wrp fi-fo-select">
+        <div @class([
+                "fi-input-wrp fi-fo-select",
+                "fi-disabled" => $isDisabled,
+            ])
+        >
             <div class="fi-select-input relative">
                 <!-- Loading indicator -->
                 <div x-show="isLoading" class="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-gray-100">
@@ -27,11 +34,13 @@
                     @keydown="handleKeyDown($event)"
                     type="button"
                     class="fi-select-input-btn"
+                    :class="{ 'fi-disabled ': isDisabled }"
                     :style="state ? `font-family: '${state}', system-ui, -apple-system, sans-serif` : ''"
                     :aria-expanded="isOpen"
                     aria-haspopup="listbox"
                     role="combobox"
                     :aria-label="state ? `Selected font: ${state}` : '{{ $getPlaceholder() }}'"
+                    :disabled="isDisabled"
                 >
                     <span x-text="state || '{{ $getPlaceholder() }}'" class="truncate"></span>
                 </button>
